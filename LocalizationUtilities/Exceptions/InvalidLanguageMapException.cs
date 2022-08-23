@@ -1,10 +1,9 @@
 ﻿using System;
 
-namespace LocalizationUtilities.Exceptions
+namespace LocalizationUtilities.Exceptions;
+
+public class InvalidLanguageMapException : Exception
 {
-	public class InvalidLanguageMapException : Exception
-	{
-		public InvalidLanguageMapException() : base() { }
-		public InvalidLanguageMapException(string message) : base(message) { }
-	}
+	public InvalidLanguageMapException() : base() { }
+	public InvalidLanguageMapException(string message) : base(message) { }
 }

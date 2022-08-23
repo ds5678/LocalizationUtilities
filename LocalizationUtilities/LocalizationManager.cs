@@ -6,113 +6,112 @@ using System.Collections.Generic;
 using System.Text;
 using UnityEngine;
 
-namespace LocalizationUtilities
+namespace LocalizationUtilities;
+
+public static class LocalizationManager
 {
-	public static class LocalizationManager
+	internal static List<LocalizationSet> localizations { get; private set; } = new List<LocalizationSet>();
+
+	public static void AddLocalizations(LocalizationSet set)
 	{
-		internal static List<LocalizationSet> localizations { get; private set; } = new List<LocalizationSet>();
+		set.Validate();
+		localizations.Add(set);
+	}
 
-		public static void AddLocalizations(LocalizationSet set)
+	public static void LoadLocalization(TextAsset asset, string path)
+	{
+		if (path.ToLower().EndsWith(".json"))
 		{
-			set.Validate();
-			localizations.Add(set);
+			LoadJSONLocalization(asset);
 		}
-
-		public static void LoadLocalization(TextAsset asset, string path)
+		else if (path.ToLower().EndsWith(".csv"))
 		{
-			if (path.ToLower().EndsWith(".json"))
-			{
-				LoadJSONLocalization(asset);
-			}
-			else if (path.ToLower().EndsWith(".csv"))
-			{
-				LoadCSVLocalization(asset);
-			}
-			else
-			{
-				MelonLogger.Warning("Found localization '{0}' that could not be loaded.", path);
-			}
+			LoadCSVLocalization(asset);
 		}
-
-		public static void LoadCSVLocalization(TextAsset textAsset)
+		else
 		{
-			ByteReader byteReader = new ByteReader(textAsset);
-			string[] languages = Trim(byteReader.ReadCSV().ToArray());
-			List<LocalizationEntry> newEntries = new List<LocalizationEntry>();
+			MelonLogger.Warning("Found localization '{0}' that could not be loaded.", path);
+		}
+	}
 
-			while (true)
+	public static void LoadCSVLocalization(TextAsset textAsset)
+	{
+		ByteReader byteReader = new ByteReader(textAsset);
+		string[] languages = Trim(byteReader.ReadCSV().ToArray());
+		List<LocalizationEntry> newEntries = new List<LocalizationEntry>();
+
+		while (true)
+		{
+			string[] values = byteReader.ReadCSV()?.ToArray();
+			if (values == null || languages == null || values.Length == 0 || languages.Length == 0)
 			{
-				string[] values = byteReader.ReadCSV()?.ToArray();
-				if (values == null || languages == null || values.Length == 0 || languages.Length == 0)
+				break;
+			}
+
+			string locID = values[0];
+			Dictionary<string, string> locDict = new Dictionary<string, string>();
+
+			int maxIndex = System.Math.Min(values.Length, languages.Length);
+			for (int j = 1; j < maxIndex; j++)
+			{
+				if (!string.IsNullOrEmpty(values[j]) && !string.IsNullOrEmpty(languages[j]))
 				{
-					break;
+					locDict.Add(languages[j], values[j]);
 				}
-
-				string locID = values[0];
-				Dictionary<string, string> locDict = new Dictionary<string, string>();
-
-				int maxIndex = System.Math.Min(values.Length, languages.Length);
-				for (int j = 1; j < maxIndex; j++)
-				{
-					if (!string.IsNullOrEmpty(values[j]) && !string.IsNullOrEmpty(languages[j]))
-					{
-						locDict.Add(languages[j], values[j]);
-					}
-				}
-
-				newEntries.Add(new LocalizationEntry(locID, locDict));
 			}
 
-			AddLocalizations(new LocalizationSet(newEntries, true));
+			newEntries.Add(new LocalizationEntry(locID, locDict));
 		}
 
-		private static string GetText(TextAsset textAsset)
+		AddLocalizations(new LocalizationSet(newEntries, true));
+	}
+
+	private static string GetText(TextAsset textAsset)
+	{
+		ByteReader byteReader = new ByteReader(textAsset);
+		StringBuilder sb = new StringBuilder();
+		while (byteReader.canRead)
 		{
-			ByteReader byteReader = new ByteReader(textAsset);
-			StringBuilder sb = new StringBuilder();
-			while (byteReader.canRead)
-			{
-				sb.AppendLine(byteReader.ReadLine());
-			}
-			return sb.ToString();
+			sb.AppendLine(byteReader.ReadLine());
 		}
+		return sb.ToString();
+	}
 
-		public static bool LoadJSONLocalization(TextAsset textAsset)
+	public static bool LoadJSONLocalization(TextAsset textAsset)
+	{
+		string contents = GetText(textAsset);
+		return LoadJSONLocalization(contents);
+	}
+
+	public static bool LoadJSONLocalization(string contents)
+	{
+		if (string.IsNullOrWhiteSpace(contents)) return false;
+		ProxyObject dict = JSON.Load(contents) as ProxyObject;
+		List<LocalizationEntry> newEntries = new List<LocalizationEntry>();
+		foreach (var pair in dict)
 		{
-			string contents = GetText(textAsset);
-			return LoadJSONLocalization(contents);
+			string locID = pair.Key;
+			Dictionary<string, string> locDict = pair.Value.Make<Dictionary<string, string>>();
+			newEntries.Add(new LocalizationEntry(locID, locDict));
 		}
+		AddLocalizations(new LocalizationSet(newEntries, true));
+		return true;
+	}
 
-		public static bool LoadJSONLocalization(string contents)
+	/// <summary>
+	/// Returns an array of string variables without any leading or trailing whitespace
+	/// </summary>
+	/// <param name="values">An array of string variables.</param>
+	/// <returns>A new array containing the trimmed values.</returns>
+	private static string[] Trim(string[] values)
+	{
+		string[] result = new string[values.Length];
+
+		for (int i = 0; i < values.Length; i++)
 		{
-			if (string.IsNullOrWhiteSpace(contents)) return false;
-			ProxyObject dict = JSON.Load(contents) as ProxyObject;
-			List<LocalizationEntry> newEntries = new List<LocalizationEntry>();
-			foreach (var pair in dict)
-			{
-				string locID = pair.Key;
-				Dictionary<string, string> locDict = pair.Value.Make<Dictionary<string, string>>();
-				newEntries.Add(new LocalizationEntry(locID, locDict));
-			}
-			AddLocalizations(new LocalizationSet(newEntries, true));
-			return true;
+			result[i] = values[i].Trim();
 		}
 
-		/// <summary>
-		/// Returns an array of string variables without any leading or trailing whitespace
-		/// </summary>
-		/// <param name="values">An array of string variables.</param>
-		/// <returns>A new array containing the trimmed values.</returns>
-		private static string[] Trim(string[] values)
-		{
-			string[] result = new string[values.Length];
-
-			for (int i = 0; i < values.Length; i++)
-			{
-				result[i] = values[i].Trim();
-			}
-
-			return result;
-		}
+		return result;
 	}
 }

@@ -1,8 +1,7 @@
 ﻿using MelonLoader;
 
-namespace LocalizationUtilities
-{
+namespace LocalizationUtilities;
+
     internal class LocalizationMod : MelonMod
     {
     }
-}
