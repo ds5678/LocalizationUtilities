@@ -10,7 +10,7 @@ namespace LocalizationUtilities;
 
 public static class LocalizationManager
 {
-	internal static List<LocalizationSet> Localizations { get; private set; } = new List<LocalizationSet>();
+	internal static HashSet<LocalizationSet> Localizations { get; private set; } = new();
 
 	public static void AddLocalizations(LocalizationSet set)
 	{

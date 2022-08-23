@@ -1,45 +1,34 @@
 ﻿using LocalizationUtilities.Exceptions;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace LocalizationUtilities;
 
-public sealed class LocalizationSet
+public sealed record class LocalizationSet(HashSet<LocalizationEntry> Entries, bool DefaultToEnglish)
 {
-	public bool defaultToEnglish = true;
-	public List<LocalizationEntry> entries;
+	public LocalizationSet(bool defaultToEnglish = true) : this(new HashSet<LocalizationEntry>(), defaultToEnglish) { }
 
-	public LocalizationSet() => entries = new List<LocalizationEntry>();
+	public LocalizationSet(LocalizationEntry entry, bool defaultToEnglish = true) : this(new HashSet<LocalizationEntry> { entry }, defaultToEnglish) { }
 
-	public LocalizationSet(LocalizationEntry entry, bool defaultToEnglish = true)
-	{
-		this.defaultToEnglish = defaultToEnglish;
-		entries = new List<LocalizationEntry>
-		{
-			entry
-		};
-	}
-
-	public LocalizationSet(List<LocalizationEntry> entries, bool defaultToEnglish = true)
-	{
-		this.entries = entries;
-		this.defaultToEnglish = defaultToEnglish;
-	}
+	public LocalizationSet(List<LocalizationEntry> entries, bool defaultToEnglish = true) : this(entries.ToHashSet(), defaultToEnglish) { }
 
 	public LocalizationSet(LocalizationEntry[] entries, bool defaultToEnglish = true) : this(new List<LocalizationEntry>(entries), defaultToEnglish) { }
 
+	public LocalizationSet(HashSet<LocalizationEntry> entries) : this(entries, true) { }
+
 	public void Validate()
 	{
-		if (entries == null)
+		if (Entries == null)
 		{
 			throw new InvalidEntryListException("Entry list cannot be null");
 		}
 
-		if (entries.Count == 0)
+		if (Entries.Count == 0)
 		{
 			throw new InvalidEntryListException("Entry list cannot be empty");
 		}
 
-		foreach (LocalizationEntry entry in entries)
+		foreach (LocalizationEntry entry in Entries)
 		{
 			entry.Validate();
 		}

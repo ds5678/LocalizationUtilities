@@ -3,47 +3,33 @@ using System.Collections.Generic;
 
 namespace LocalizationUtilities;
 
-public sealed class LocalizationEntry
+/// <summary>
+/// 
+/// </summary>
+/// <param name="LocalizationID">The id for this localized string.</param>
+/// <param name="Map">A LanguageName : LocalizedString dictionary</param>
+public sealed record class LocalizationEntry(string LocalizationID, Dictionary<string, string> Map)
 {
-	public string? localizationID;
-	public Dictionary<string, string> map;
-
-	public LocalizationEntry()
-	{
-		localizationID = null;
-		map = new Dictionary<string, string>();
-	}
-
-	public LocalizationEntry(string id)
-	{
-		localizationID = id;
-		map = new Dictionary<string, string>();
-	}
-
-	public LocalizationEntry(string id, Dictionary<string, string> map)
-	{
-		localizationID = id;
-		this.map = map;
-	}
+	public LocalizationEntry(string localizationID) : this (localizationID, new()) { }
 
 	public void Validate()
 	{
-		if (string.IsNullOrEmpty(localizationID))
+		if (string.IsNullOrEmpty(LocalizationID))
 		{
 			throw new InvalidLocalizationKeyException("Localization ID cannot be null or empty.");
 		}
 
-		if (map == null)
+		if (Map == null)
 		{
 			throw new InvalidLanguageMapException("Map cannot be null.");
 		}
 
-		if (map.Count == 0)
+		if (Map.Count == 0)
 		{
 			throw new InvalidLanguageMapException("Map cannot have no contents.");
 		}
 
-		foreach (KeyValuePair<string, string> pair in map)
+		foreach (KeyValuePair<string, string> pair in Map)
 		{
 			if (string.IsNullOrEmpty(pair.Key))
 			{
@@ -59,6 +45,6 @@ public sealed class LocalizationEntry
 
 	public override string ToString()
 	{
-		return localizationID ?? base.ToString();
+		return LocalizationID;
 	}
 }
