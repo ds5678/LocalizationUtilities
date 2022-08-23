@@ -1,4 +1,6 @@
-﻿using MelonLoader;
+﻿extern alias Hinterland;
+using Hinterland;
+using MelonLoader;
 using MelonLoader.TinyJSON;
 using System.Collections.Generic;
 using System.Text;
