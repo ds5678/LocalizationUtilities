@@ -10,8 +10,8 @@ internal static class LocalizationPatch
 {
 	private static void Postfix()
 	{
-		var strTable = Localization.s_CurrentLanguageStringTable;
-		foreach (var set in LocalizationManager.localizations)
+		StringTable strTable = Localization.s_CurrentLanguageStringTable;
+		foreach (LocalizationSet set in LocalizationManager.Localizations)
 		{
 			AddOrUpdate(strTable, set);
 		}
@@ -20,13 +20,9 @@ internal static class LocalizationPatch
 	private static void AddOrUpdate(StringTable stringTable, LocalizationSet set)
 	{
 		string[] languages = stringTable.GetLanguages().ToArray().ToArray();
-		foreach (var entry in set.entries)
+		foreach (LocalizationEntry entry in set.entries)
 		{
-			StringTableData.Entry strEntry = stringTable.GetEntryFromKey(entry.localizationID);
-			if (strEntry == null)
-			{
-				strEntry = stringTable.AddEntryForKey(entry.localizationID);
-			}
+			StringTableData.Entry strEntry = stringTable.GetEntryFromKey(entry.localizationID) ?? stringTable.AddEntryForKey(entry.localizationID);
 			for (int i = 0; i < languages.Length; i++)
 			{
 				string language = languages[i];

@@ -10,12 +10,12 @@ namespace LocalizationUtilities;
 
 public static class LocalizationManager
 {
-	internal static List<LocalizationSet> localizations { get; private set; } = new List<LocalizationSet>();
+	internal static List<LocalizationSet> Localizations { get; private set; } = new List<LocalizationSet>();
 
 	public static void AddLocalizations(LocalizationSet set)
 	{
 		set.Validate();
-		localizations.Add(set);
+		Localizations.Add(set);
 	}
 
 	public static void LoadLocalization(TextAsset asset, string path)
@@ -49,7 +49,7 @@ public static class LocalizationManager
 			}
 
 			string locID = values[0];
-			Dictionary<string, string> locDict = new Dictionary<string, string>();
+			Dictionary<string, string> locDict = new();
 
 			int maxIndex = System.Math.Min(values.Length, languages.Length);
 			for (int j = 1; j < maxIndex; j++)
@@ -69,7 +69,7 @@ public static class LocalizationManager
 	private static string GetText(TextAsset textAsset)
 	{
 		ByteReader byteReader = new ByteReader(textAsset);
-		StringBuilder sb = new StringBuilder();
+		StringBuilder sb = new();
 		while (byteReader.canRead)
 		{
 			sb.AppendLine(byteReader.ReadLine());
@@ -85,10 +85,14 @@ public static class LocalizationManager
 
 	public static bool LoadJSONLocalization(string contents)
 	{
-		if (string.IsNullOrWhiteSpace(contents)) return false;
+		if (string.IsNullOrWhiteSpace(contents))
+		{
+			return false;
+		}
+
 		ProxyObject dict = (ProxyObject)JSON.Load(contents);
 		List<LocalizationEntry> newEntries = new List<LocalizationEntry>();
-		foreach (var pair in dict)
+		foreach (KeyValuePair<string, Variant> pair in dict)
 		{
 			string locID = pair.Key;
 			Dictionary<string, string> locDict = pair.Value.Make<Dictionary<string, string>>();

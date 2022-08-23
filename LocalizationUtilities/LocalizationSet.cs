@@ -13,8 +13,10 @@ public sealed class LocalizationSet
 	public LocalizationSet(LocalizationEntry entry, bool defaultToEnglish = true)
 	{
 		this.defaultToEnglish = defaultToEnglish;
-		entries = new List<LocalizationEntry>();
-		entries.Add(entry);
+		entries = new List<LocalizationEntry>
+		{
+			entry
+		};
 	}
 
 	public LocalizationSet(List<LocalizationEntry> entries, bool defaultToEnglish = true)
@@ -28,10 +30,16 @@ public sealed class LocalizationSet
 	public void Validate()
 	{
 		if (entries == null)
+		{
 			throw new InvalidEntryListException("Entry list cannot be null");
+		}
+
 		if (entries.Count == 0)
+		{
 			throw new InvalidEntryListException("Entry list cannot be empty");
-		foreach (var entry in entries)
+		}
+
+		foreach (LocalizationEntry entry in entries)
 		{
 			entry.Validate();
 		}

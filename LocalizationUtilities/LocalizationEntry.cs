@@ -29,17 +29,31 @@ public sealed class LocalizationEntry
 	public void Validate()
 	{
 		if (string.IsNullOrEmpty(localizationID))
+		{
 			throw new InvalidLocalizationKeyException("Localization ID cannot be null or empty.");
+		}
+
 		if (map == null)
+		{
 			throw new InvalidLanguageMapException("Map cannot be null.");
+		}
+
 		if (map.Count == 0)
+		{
 			throw new InvalidLanguageMapException("Map cannot have no contents.");
-		foreach (var pair in map)
+		}
+
+		foreach (KeyValuePair<string, string> pair in map)
 		{
 			if (string.IsNullOrEmpty(pair.Key))
+			{
 				throw new InvalidLanguageMapException("Localization language cannot be null or empty.");
+			}
+
 			if (pair.Value == null)
+			{
 				throw new InvalidLanguageMapException("Localized text cannot be null.");
+			}
 		}
 	}
 
