@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace LocalizationUtilities;
 
-public class LocalizationSet
+public sealed class LocalizationSet
 {
 	public bool defaultToEnglish = true;
 	public List<LocalizationEntry> entries;

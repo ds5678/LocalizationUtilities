@@ -3,9 +3,9 @@ using System.Collections.Generic;
 
 namespace LocalizationUtilities;
 
-public class LocalizationEntry
+public sealed class LocalizationEntry
 {
-	public string localizationID;
+	public string? localizationID;
 	public Dictionary<string, string> map;
 
 	public LocalizationEntry()

@@ -20,17 +20,17 @@ public static class LocalizationManager
 
 	public static void LoadLocalization(TextAsset asset, string path)
 	{
-		if (path.ToLower().EndsWith(".json"))
+		if (path.ToLower().EndsWith(".json", System.StringComparison.Ordinal))
 		{
 			LoadJSONLocalization(asset);
 		}
-		else if (path.ToLower().EndsWith(".csv"))
+		else if (path.ToLower().EndsWith(".csv", System.StringComparison.Ordinal))
 		{
 			LoadCSVLocalization(asset);
 		}
 		else
 		{
-			MelonLogger.Warning("Found localization '{0}' that could not be loaded.", path);
+			MelonLogger.Warning($"Found localization '{path}' that could not be loaded.");
 		}
 	}
 
@@ -38,7 +38,7 @@ public static class LocalizationManager
 	{
 		ByteReader byteReader = new ByteReader(textAsset);
 		string[] languages = Trim(byteReader.ReadCSV().ToArray());
-		List<LocalizationEntry> newEntries = new List<LocalizationEntry>();
+		List<LocalizationEntry> newEntries = new();
 
 		while (true)
 		{
@@ -86,7 +86,7 @@ public static class LocalizationManager
 	public static bool LoadJSONLocalization(string contents)
 	{
 		if (string.IsNullOrWhiteSpace(contents)) return false;
-		ProxyObject dict = JSON.Load(contents) as ProxyObject;
+		ProxyObject dict = (ProxyObject)JSON.Load(contents);
 		List<LocalizationEntry> newEntries = new List<LocalizationEntry>();
 		foreach (var pair in dict)
 		{

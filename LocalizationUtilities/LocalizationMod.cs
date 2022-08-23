@@ -2,6 +2,6 @@
 
 namespace LocalizationUtilities;
 
-    internal class LocalizationMod : MelonMod
-    {
-    }
+internal sealed class LocalizationMod : MelonMod
+{
+}
