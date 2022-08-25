@@ -1,5 +1,4 @@
 ﻿extern alias Hinterland;
-using Hinterland;
 using MelonLoader;
 using MelonLoader.TinyJSON;
 using System.Collections.Generic;
@@ -36,7 +35,7 @@ public static class LocalizationManager
 
 	public static void LoadCSVLocalization(TextAsset textAsset)
 	{
-		ByteReader byteReader = new ByteReader(textAsset);
+		Hinterland.ByteReader byteReader = new Hinterland.ByteReader(textAsset);
 		string[] languages = Trim(byteReader.ReadCSV().ToArray());
 		List<LocalizationEntry> newEntries = new();
 
@@ -68,7 +67,7 @@ public static class LocalizationManager
 
 	private static string GetText(TextAsset textAsset)
 	{
-		ByteReader byteReader = new ByteReader(textAsset);
+		Hinterland.ByteReader byteReader = new Hinterland.ByteReader(textAsset);
 		StringBuilder sb = new();
 		while (byteReader.canRead)
 		{
@@ -91,7 +90,7 @@ public static class LocalizationManager
 		}
 
 		ProxyObject dict = (ProxyObject)JSON.Load(contents);
-		List<LocalizationEntry> newEntries = new List<LocalizationEntry>();
+		List<LocalizationEntry> newEntries = new();
 		foreach (KeyValuePair<string, Variant> pair in dict)
 		{
 			string locID = pair.Key;
