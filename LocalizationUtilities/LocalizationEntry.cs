@@ -1,5 +1,4 @@
 ﻿using LocalizationUtilities.Exceptions;
-using System.Collections.Generic;
 
 namespace LocalizationUtilities;
 

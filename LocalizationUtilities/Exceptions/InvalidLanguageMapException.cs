@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace LocalizationUtilities.Exceptions;
+﻿namespace LocalizationUtilities.Exceptions;
 
 public sealed class InvalidLanguageMapException : Exception
 {

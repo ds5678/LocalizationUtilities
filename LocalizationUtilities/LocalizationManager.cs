@@ -1,7 +1,6 @@
-﻿extern alias Hinterland;
+﻿using Il2Cpp;
 using MelonLoader;
 using MelonLoader.TinyJSON;
-using System.Collections.Generic;
 using System.Text;
 using UnityEngine;
 
@@ -35,7 +34,7 @@ public static class LocalizationManager
 
 	public static void LoadCSVLocalization(TextAsset textAsset)
 	{
-		Hinterland.ByteReader byteReader = new Hinterland.ByteReader(textAsset);
+		ByteReader byteReader = new ByteReader(textAsset);
 		string[] languages = Trim(byteReader.ReadCSV().ToArray());
 		List<LocalizationEntry> newEntries = new();
 
@@ -67,7 +66,7 @@ public static class LocalizationManager
 
 	private static string GetText(TextAsset textAsset)
 	{
-		Hinterland.ByteReader byteReader = new Hinterland.ByteReader(textAsset);
+		ByteReader byteReader = new ByteReader(textAsset);
 		StringBuilder sb = new();
 		while (byteReader.canRead)
 		{

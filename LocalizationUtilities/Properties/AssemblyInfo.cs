@@ -3,9 +3,6 @@ using System.Reflection;
 using System.Runtime.InteropServices;
 using BuildInfo = LocalizationUtilities.BuildInfo;
 
-[assembly: ComVisible(false)]
-[assembly: Guid("700dc994-efa4-46e5-9395-cce3511d98df")]
-
 [assembly: AssemblyTitle(BuildInfo.Name)]
 [assembly: AssemblyDescription(BuildInfo.Description)]
 [assembly: AssemblyCompany(BuildInfo.Company)]

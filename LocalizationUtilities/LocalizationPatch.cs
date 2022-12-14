@@ -1,7 +1,6 @@
 ﻿extern alias Hinterland;
 using HarmonyLib;
-using Hinterland;
-using System.Linq;
+using Il2Cpp;
 using StringTableEntry = Hinterland.StringTableData.Entry;
 
 namespace LocalizationUtilities;
