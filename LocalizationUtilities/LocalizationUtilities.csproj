@@ -39,6 +39,7 @@
 	<ItemDefinitionGroup>
 		<Reference>
 			<Private>False</Private>
+			<SpecificVersion>False</SpecificVersion>
 		</Reference>
 	</ItemDefinitionGroup>
 
