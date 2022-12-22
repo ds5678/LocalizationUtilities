@@ -1,7 +1,6 @@
-﻿extern alias Hinterland;
-using HarmonyLib;
+﻿using HarmonyLib;
 using Il2Cpp;
-using StringTableEntry = Hinterland.StringTableData.Entry;
+using StringTableEntry = Il2Cpp.StringTableData.Entry;
 
 namespace LocalizationUtilities;
 
@@ -27,11 +26,11 @@ internal static class LocalizationPatch
 			for (int i = 0; i < languages.Length; i++)
 			{
 				string language = languages[i];
-				if (entry.Map.TryGetValue(language, out string text))
+				if (entry.Map.TryGetValue(language, out string? text))
 				{
 					stringEntry.m_Languages[i] = text;
 				}
-				else if (set.DefaultToEnglish && entry.Map.TryGetValue("English", out string text2))
+				else if (set.DefaultToEnglish && entry.Map.TryGetValue("English", out string? text2))
 				{
 					stringEntry.m_Languages[i] = text2;
 				}
