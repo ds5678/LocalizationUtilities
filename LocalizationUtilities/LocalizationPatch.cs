@@ -6,17 +6,14 @@ namespace LocalizationUtilities;
 
 internal static class LocalizationPatch
 {
-	
-	[HarmonyPatch(typeof(Localization), nameof(Localization.LoadStringTableForLanguage), new Type[] { typeof(AssetBundleRef),typeof(string)})]
-	internal class LoadStringTableForLanguage_Postfix
+	[HarmonyPostfix]
+	[HarmonyPatch(typeof(Localization), nameof(Localization.LoadStringTableForLanguage))]
+	private static void AddCustomLocalizationsToStringTable()
 	{
-		private static void Postfix()
+		StringTable strTable = Localization.s_CurrentLanguageStringTable;
+		foreach (LocalizationSet set in LocalizationManager.Localizations)
 		{
-			StringTable strTable = Localization.s_CurrentLanguageStringTable;
-			foreach (LocalizationSet set in LocalizationManager.Localizations)
-			{
-				AddOrUpdate(strTable, set);
-			}
+			AddOrUpdate(strTable, set);
 		}
 	}
 
