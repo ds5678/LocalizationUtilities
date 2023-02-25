@@ -72,7 +72,14 @@ public static class LocalizationManager
 		{
 			sb.AppendLine(byteReader.ReadLine());
 		}
-		return sb.ToString();
+		string str = sb.ToString();
+		string bom = Encoding.UTF8.GetString(Encoding.UTF8.GetPreamble());
+		if (str.StartsWith(bom))
+		{
+			str = str.Remove(0, bom.Length);
+			str = str.Replace("\0", "");
+		}
+		return str;
 	}
 
 	public static bool LoadJSONLocalization(TextAsset textAsset)
