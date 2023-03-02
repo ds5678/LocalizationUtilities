@@ -73,11 +73,11 @@ public static class LocalizationManager
 			sb.AppendLine(byteReader.ReadLine());
 		}
 		string str = sb.ToString();
-		string bom = Encoding.UTF8.GetString(Encoding.UTF8.GetPreamble());
-		if (str.StartsWith(bom))
+
+		int startFrom = str.IndexOf(@"{");
+		if (startFrom > 0)
 		{
-			str = str.Remove(0, bom.Length);
-			str = str.Replace("\0", "");
+			str = str.Substring(startFrom);
 		}
 		return str;
 	}
