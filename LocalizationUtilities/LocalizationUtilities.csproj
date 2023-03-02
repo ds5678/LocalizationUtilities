@@ -1,6 +1,6 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 	<!--This is an xml comment. Comments have no impact on compiling.-->
-
+	
 	<PropertyGroup>
 		<!--This is the .NET version the mod will be compiled with. Don't change it.-->
 		<TargetFramework>net6.0</TargetFramework>
@@ -23,6 +23,24 @@
 		<!--none skips creation of pdb data.-->
 		<DebugType>embedded</DebugType>
 	</PropertyGroup>
+	
+	<PropertyGroup>
+		<Authors>ds5678</Authors>
+		<Version>1.1.0.0</Version>
+		<AssemblyVersion>1.1.0.0</AssemblyVersion>
+		<PackageId>ds5678.Modding.TLD.LocalizationUtilities</PackageId>
+		<PackageTags>MelonLoader Modding TLD Json Localization Utility Mod</PackageTags>
+		<RepositoryUrl>https://github.com/ds5678/LocalizationUtilities</RepositoryUrl>
+		<PackageLicenseExpression>MIT</PackageLicenseExpression>
+		<RepositoryType>git</RepositoryType>
+		<PackageProjectUrl>https://github.com/ds5678/LocalizationUtilities</PackageProjectUrl>
+		<Description>Library for The Long Dark that loads localization data.</Description>
+		<GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+
+		<GenerateDocumentationFile>true</GenerateDocumentationFile>
+		<DocumentationFile>bin\LocalizationUtilities.xml</DocumentationFile>
+		<NoWarn>1591</NoWarn>
+	</PropertyGroup>
 
 	<!--This is the of packages that the mod references.-->
 	<ItemGroup>
@@ -31,4 +49,5 @@
 		<!--The package version here in this template may be outdated and need to be updated. Visual Studio can update package versions automatically.-->
 		<!--If the mod references any other mods (such as ModSettings), that NuGet package will also need to be listed here.-->
 	</ItemGroup>
+	
 </Project>
