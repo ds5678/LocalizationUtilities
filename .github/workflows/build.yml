@@ -33,7 +33,7 @@ jobs:
         path: ./LocalizationUtilities/bin/Release/net6.0/LocalizationUtilities.dll
         if-no-files-found: error
         
-     - name: Upload
+    - name: Upload
       uses: actions/upload-artifact@v3
       with:
         name: LocalizationUtilities_nupkg
