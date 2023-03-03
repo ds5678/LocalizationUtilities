@@ -1,5 +1,4 @@
-﻿using Il2Cpp;
-using MelonLoader;
+﻿using MelonLoader;
 using MelonLoader.TinyJSON;
 using System.Text;
 using UnityEngine;
@@ -31,20 +30,14 @@ public static class LocalizationManager
 	
 	private static string GetText(TextAsset textAsset)
 	{
-		ByteReader byteReader = new ByteReader(textAsset);
-		StringBuilder sb = new();
-		while (byteReader.canRead)
+		const byte leftCurlyBracket = (byte)'{';
+		byte[] bytes = textAsset.bytes;
+		int index = Array.IndexOf(bytes, leftCurlyBracket);
+		if (index < 0)
 		{
-			sb.AppendLine(byteReader.ReadLine());
+			throw new ArgumentException("TextAsset has no Json content.", nameof(textAsset));
 		}
-		string str = sb.ToString();
-
-		int startFrom = str.IndexOf(@"{");
-		if (startFrom > 0)
-		{
-			str = str.Substring(startFrom);
-		}
-		return str;
+		return Encoding.UTF8.GetString(new ReadOnlySpan<byte>(bytes, index, bytes.Length - index));
 	}
 
 	public static bool LoadJsonLocalization(TextAsset textAsset)

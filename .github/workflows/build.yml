@@ -37,5 +37,5 @@ jobs:
       uses: actions/upload-artifact@v3
       with:
         name: LocalizationUtilities_nupkg
-        path: ./LocalizationUtilities/bin/Release/ds5678.Modding.TLD.LocalizationUtilities.1.1.0.nupkg
+        path: ./LocalizationUtilities/bin/Release/*.nupkg
         if-no-files-found: error
