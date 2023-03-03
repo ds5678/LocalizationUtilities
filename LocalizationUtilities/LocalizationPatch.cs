@@ -4,6 +4,7 @@ using StringTableEntry = Il2Cpp.StringTableData.Entry;
 
 namespace LocalizationUtilities;
 
+[HarmonyPatch]
 internal static class LocalizationPatch
 {
 	[HarmonyPostfix]
