@@ -1,5 +1,4 @@
-﻿using Il2Cpp;
-using MelonLoader;
+﻿using MelonLoader;
 using MelonLoader.TinyJSON;
 using System.Text;
 using UnityEngine;
@@ -20,11 +19,7 @@ public static class LocalizationManager
 	{
 		if (path.ToLower().EndsWith(".json", System.StringComparison.Ordinal))
 		{
-			LoadJSONLocalization(asset);
-		}
-		else if (path.ToLower().EndsWith(".csv", System.StringComparison.Ordinal))
-		{
-			LoadCSVLocalization(asset);
+			LoadJsonLocalization(asset);
 		}
 		else
 		{
@@ -32,56 +27,26 @@ public static class LocalizationManager
 		}
 	}
 
-	public static void LoadCSVLocalization(TextAsset textAsset)
-	{
-		ByteReader byteReader = new ByteReader(textAsset);
-		string[] languages = Trim(byteReader.ReadCSV().ToArray());
-		List<LocalizationEntry> newEntries = new();
-
-		while (true)
-		{
-			string[] values = byteReader.ReadCSV()?.ToArray();
-			if (values == null || languages == null || values.Length == 0 || languages.Length == 0)
-			{
-				break;
-			}
-
-			string locID = values[0];
-			Dictionary<string, string> locDict = new();
-
-			int maxIndex = System.Math.Min(values.Length, languages.Length);
-			for (int j = 1; j < maxIndex; j++)
-			{
-				if (!string.IsNullOrEmpty(values[j]) && !string.IsNullOrEmpty(languages[j]))
-				{
-					locDict.Add(languages[j], values[j]);
-				}
-			}
-
-			newEntries.Add(new LocalizationEntry(locID, locDict));
-		}
-
-		AddLocalizations(new LocalizationSet(newEntries, true));
-	}
-
+	
 	private static string GetText(TextAsset textAsset)
 	{
-		ByteReader byteReader = new ByteReader(textAsset);
-		StringBuilder sb = new();
-		while (byteReader.canRead)
+		const byte leftCurlyBracket = (byte)'{';
+		byte[] bytes = textAsset.bytes;
+		int index = Array.IndexOf(bytes, leftCurlyBracket);
+		if (index < 0)
 		{
-			sb.AppendLine(byteReader.ReadLine());
+			throw new ArgumentException("TextAsset has no Json content.", nameof(textAsset));
 		}
-		return sb.ToString();
+		return Encoding.UTF8.GetString(new ReadOnlySpan<byte>(bytes, index, bytes.Length - index));
 	}
 
-	public static bool LoadJSONLocalization(TextAsset textAsset)
+	public static bool LoadJsonLocalization(TextAsset textAsset)
 	{
 		string contents = GetText(textAsset);
-		return LoadJSONLocalization(contents);
+		return LoadJsonLocalization(contents);
 	}
 
-	public static bool LoadJSONLocalization(string contents)
+	public static bool LoadJsonLocalization(string contents)
 	{
 		if (string.IsNullOrWhiteSpace(contents))
 		{

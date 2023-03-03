@@ -1,11 +1,6 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 	<!--This is an xml comment. Comments have no impact on compiling.-->
-
-	<PropertyGroup>
-		<!--This needs to be changed for the mod to compile.-->
-		<TheLongDarkPath>C:\Program Files (x86)\Steam\steamapps\common\TheLongDark</TheLongDarkPath>
-	</PropertyGroup>
-
+	
 	<PropertyGroup>
 		<!--This is the .NET version the mod will be compiled with. Don't change it.-->
 		<TargetFramework>net6.0</TargetFramework>
@@ -22,36 +17,37 @@
 		<!--This tells the compiler to use assembly attributes instead of generating its own.-->
 		<GenerateAssemblyInfo>false</GenerateAssemblyInfo>
 
-		<!--PDB files are mostly useless for modding since they can't be loaded.-->
-		<DebugType>none</DebugType>
+		<!--PDB files give line numbers in stack traces (errors). This is useful for debugging. There are 3 options:-->
+		<!--full has a pdb file created beside the dll.-->
+		<!--embedded has the pdb data embedded within the dll. This is useful because bug reports will then have line numbers.-->
+		<!--none skips creation of pdb data.-->
+		<DebugType>embedded</DebugType>
 	</PropertyGroup>
-
-	<!--This tells the compiler where to look for assemblies. Don't change it.-->
+	
 	<PropertyGroup>
-		<MelonLoaderPath>$(TheLongDarkPath)/MelonLoader/net6</MelonLoaderPath>
-		<ManagedPath>$(TheLongDarkPath)/MelonLoader/Managed</ManagedPath>
-		<Il2CppPath>$(TheLongDarkPath)/MelonLoader/Il2CppAssemblies</Il2CppPath>
-		<ModsPath>$(TheLongDarkPath)/Mods</ModsPath>
-		<AssemblySearchPaths>$(AssemblySearchPaths);$(MelonLoaderPath);$(ManagedPath);$(Il2CppPath);$(ModsPath);</AssemblySearchPaths>
+		<Authors>ds5678</Authors>
+		<Version>2.0.0</Version>
+		<AssemblyVersion>2.0.0</AssemblyVersion>
+		<PackageId>ds5678.Modding.TLD.LocalizationUtilities</PackageId>
+		<PackageTags>MelonLoader Modding TLD Json Localization Utility Mod</PackageTags>
+		<RepositoryUrl>https://github.com/ds5678/LocalizationUtilities</RepositoryUrl>
+		<PackageLicenseExpression>MIT</PackageLicenseExpression>
+		<RepositoryType>git</RepositoryType>
+		<PackageProjectUrl>https://github.com/ds5678/LocalizationUtilities</PackageProjectUrl>
+		<Description>Library for The Long Dark that loads localization data.</Description>
+		<GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+
+		<GenerateDocumentationFile>true</GenerateDocumentationFile>
+		<DocumentationFile>bin\LocalizationUtilities.xml</DocumentationFile>
+		<NoWarn>1591</NoWarn>
 	</PropertyGroup>
 
-	<!--This tells the compiler to not include referenced assemblies in the output folder.-->
-	<ItemDefinitionGroup>
-		<Reference>
-			<Private>False</Private>
-			<SpecificVersion>False</SpecificVersion>
-		</Reference>
-	</ItemDefinitionGroup>
-
-	<!--This is the list of assemblies that the mod references. Most of these are unnecessary for normal mods, but are included here for completeness.-->
+	<!--This is the of packages that the mod references.-->
 	<ItemGroup>
-		<Reference Include="MelonLoader"/>
-		<Reference Include="0Harmony"/>
-		<Reference Include="Il2CppInterop.Common"/>
-		<Reference Include="Il2CppInterop.Runtime"/>
-		<Reference Include="Assembly-CSharp"/>
-		<Reference Include="Il2Cppmscorlib"/>
-		<Reference Include="Il2CppSystem"/>
-		<Reference Include="UnityEngine.CoreModule"/>
+		<!--This package contains almost everything a person could possibly need to reference while modding.-->
+		<PackageReference Include="ds5678.Modding.TLD.Il2CppAssemblies.Windows" Version="2.6.0" />
+		<!--The package version here in this template may be outdated and need to be updated. Visual Studio can update package versions automatically.-->
+		<!--If the mod references any other mods (such as ModSettings), that NuGet package will also need to be listed here.-->
 	</ItemGroup>
+	
 </Project>
